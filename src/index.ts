@@ -1,16 +1,14 @@
-const process = require("process");
-const Libp2p = require("libp2p");
-const TCP = require("libp2p-tcp");
-const { NOISE } = require("libp2p-noise");
-const MPLEX = require("libp2p-mplex");
+import Libp2p from "libp2p";
+import TCP from "libp2p-tcp";
+import { NOISE } from "libp2p-noise";
+import MPLEX from "libp2p-mplex";
 
-const { multiaddr } = require("multiaddr");
+import { multiaddr } from "multiaddr";
 
-const main = async () => {
+(async () => {
   try {
     const node = await Libp2p.create({
       addresses: {
-        // add a listen address (localhost) to accept TCP connections on a random port
         listen: ["/ip4/0.0.0.0/tcp/0"],
       },
       modules: {
@@ -21,9 +19,10 @@ const main = async () => {
     });
 
     await node.start();
-    console.log("libp2p has started");
 
     console.log("listening on addresses:");
+    console.log({ mutiaddrs: node.multiaddrs });
+
     node.multiaddrs.forEach((addr) => {
       console.log(`${addr.toString()}/p2p/${node.peerId.toB58String()}`);
     });
@@ -49,6 +48,4 @@ const main = async () => {
   } catch (error) {
     console.log(error);
   }
-};
-
-main();
+})();
